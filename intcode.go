@@ -41,11 +41,9 @@ func (ic *Intcode) operate(pc int64) int64 {
 		ic.setMode(pc, 3, ic.getMode(pc, 1)*ic.getMode(pc, 2))
 		return pc + 4
 	case 3:
-		//fmt.Println("Input", ic.label)
 		ic.setMode(pc, 1, <-ic.input)
 		return pc + 2
 	case 4:
-		//fmt.Println("Output", ic.label, ic.getMode(pc, 1))
 		ic.output <- ic.getMode(pc, 1)
 		return pc + 2
 	case 5:

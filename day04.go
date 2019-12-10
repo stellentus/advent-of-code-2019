@@ -9,7 +9,7 @@ func init() {
 	codeForDay[4] = day4
 }
 
-func day4() {
+func day4(example int) {
 	min, max := 128392, 643281
 
 	manySum := 0
