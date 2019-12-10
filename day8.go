@@ -22,7 +22,7 @@ func day8() {
 			copy(goal, count)
 		}
 	}
-	fmt.Println("D", goal[1]*goal[2])
+	fmt.Println("D8-P1:", goal[1]*goal[2])
 
 	output := make([]int, 25*6)
 	for i := range output {
@@ -37,7 +37,16 @@ func day8() {
 			}
 		}
 	}
+
+	fmt.Println("D8-P2:")
 	for i := 0; i < 6; i++ {
-		fmt.Println(output[i*25 : (i*25 + 25)])
+		for j := 0; j < 25; j++ {
+			if output[i*25+j] == 1 {
+				fmt.Printf("X")
+			} else {
+				fmt.Printf(" ")
+			}
+		}
+		fmt.Println("")
 	}
 }
