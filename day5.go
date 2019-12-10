@@ -7,112 +7,61 @@ func init() {
 	codeForDay[5] = day5
 }
 
-type Intcode struct {
-	prog   []int
-	input  []int
-	output []int
-}
-
 func day5() {
 	program := []int{3, 225, 1, 225, 6, 6, 1100, 1, 238, 225, 104, 0, 1002, 188, 27, 224, 1001, 224, -2241, 224, 4, 224, 102, 8, 223, 223, 1001, 224, 6, 224, 1, 223, 224, 223, 101, 65, 153, 224, 101, -108, 224, 224, 4, 224, 1002, 223, 8, 223, 1001, 224, 1, 224, 1, 224, 223, 223, 1, 158, 191, 224, 101, -113, 224, 224, 4, 224, 102, 8, 223, 223, 1001, 224, 7, 224, 1, 223, 224, 223, 1001, 195, 14, 224, 1001, 224, -81, 224, 4, 224, 1002, 223, 8, 223, 101, 3, 224, 224, 1, 224, 223, 223, 1102, 47, 76, 225, 1102, 35, 69, 224, 101, -2415, 224, 224, 4, 224, 102, 8, 223, 223, 101, 2, 224, 224, 1, 224, 223, 223, 1101, 32, 38, 224, 101, -70, 224, 224, 4, 224, 102, 8, 223, 223, 101, 3, 224, 224, 1, 224, 223, 223, 1102, 66, 13, 225, 1102, 43, 84, 225, 1101, 12, 62, 225, 1102, 30, 35, 225, 2, 149, 101, 224, 101, -3102, 224, 224, 4, 224, 102, 8, 223, 223, 101, 4, 224, 224, 1, 223, 224, 223, 1101, 76, 83, 225, 1102, 51, 51, 225, 1102, 67, 75, 225, 102, 42, 162, 224, 101, -1470, 224, 224, 4, 224, 102, 8, 223, 223, 101, 1, 224, 224, 1, 223, 224, 223, 4, 223, 99, 0, 0, 0, 677, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1105, 0, 99999, 1105, 227, 247, 1105, 1, 99999, 1005, 227, 99999, 1005, 0, 256, 1105, 1, 99999, 1106, 227, 99999, 1106, 0, 265, 1105, 1, 99999, 1006, 0, 99999, 1006, 227, 274, 1105, 1, 99999, 1105, 1, 280, 1105, 1, 99999, 1, 225, 225, 225, 1101, 294, 0, 0, 105, 1, 0, 1105, 1, 99999, 1106, 0, 300, 1105, 1, 99999, 1, 225, 225, 225, 1101, 314, 0, 0, 106, 0, 0, 1105, 1, 99999, 1108, 226, 677, 224, 1002, 223, 2, 223, 1005, 224, 329, 101, 1, 223, 223, 108, 226, 226, 224, 1002, 223, 2, 223, 1005, 224, 344, 1001, 223, 1, 223, 1107, 677, 226, 224, 1002, 223, 2, 223, 1006, 224, 359, 101, 1, 223, 223, 1008, 226, 226, 224, 1002, 223, 2, 223, 1005, 224, 374, 101, 1, 223, 223, 8, 226, 677, 224, 102, 2, 223, 223, 1006, 224, 389, 101, 1, 223, 223, 7, 226, 677, 224, 1002, 223, 2, 223, 1005, 224, 404, 1001, 223, 1, 223, 7, 226, 226, 224, 1002, 223, 2, 223, 1005, 224, 419, 101, 1, 223, 223, 107, 226, 677, 224, 1002, 223, 2, 223, 1005, 224, 434, 101, 1, 223, 223, 107, 226, 226, 224, 1002, 223, 2, 223, 1005, 224, 449, 1001, 223, 1, 223, 1107, 226, 677, 224, 102, 2, 223, 223, 1006, 224, 464, 1001, 223, 1, 223, 1007, 677, 226, 224, 1002, 223, 2, 223, 1006, 224, 479, 1001, 223, 1, 223, 1107, 677, 677, 224, 1002, 223, 2, 223, 1005, 224, 494, 101, 1, 223, 223, 1108, 677, 226, 224, 102, 2, 223, 223, 1006, 224, 509, 101, 1, 223, 223, 7, 677, 226, 224, 1002, 223, 2, 223, 1005, 224, 524, 1001, 223, 1, 223, 1008, 677, 226, 224, 102, 2, 223, 223, 1005, 224, 539, 1001, 223, 1, 223, 1108, 226, 226, 224, 102, 2, 223, 223, 1005, 224, 554, 101, 1, 223, 223, 107, 677, 677, 224, 102, 2, 223, 223, 1006, 224, 569, 1001, 223, 1, 223, 1007, 226, 226, 224, 102, 2, 223, 223, 1006, 224, 584, 101, 1, 223, 223, 8, 677, 677, 224, 102, 2, 223, 223, 1005, 224, 599, 1001, 223, 1, 223, 108, 677, 677, 224, 1002, 223, 2, 223, 1005, 224, 614, 101, 1, 223, 223, 108, 226, 677, 224, 102, 2, 223, 223, 1005, 224, 629, 101, 1, 223, 223, 8, 677, 226, 224, 102, 2, 223, 223, 1006, 224, 644, 1001, 223, 1, 223, 1007, 677, 677, 224, 1002, 223, 2, 223, 1006, 224, 659, 1001, 223, 1, 223, 1008, 677, 677, 224, 1002, 223, 2, 223, 1005, 224, 674, 101, 1, 223, 223, 4, 223, 99, 226}
 
-	ic := NewIC(program, []int{1})
+	ic := NewSimpleIC(program, []int{1})
 	ic.calculate()
 	fmt.Println("D5-P1:", ic.getResult())
 
-	ic = NewIC(program, []int{5})
+	ic = NewSimpleIC(program, []int{5})
 	ic.calculate()
 	fmt.Println("D5-P2:", ic.getResult())
 }
 
-func NewIC(program, input []int) Intcode {
-	tmp := make([]int, len(program))
-	copy(tmp, program)
-	ic := Intcode{tmp, input, []int{}}
-	return ic
+type SimpleIC struct {
+	Intcode
+	staticInput  []int
+	staticOutput []int
 }
 
-func (ic *Intcode) calculate() int {
-	pc := 0
-	for pc < len(ic.prog) {
-		pc = ic.operate(pc)
-		if pc == -1 {
-			break
-		}
+func NewSimpleIC(program, input []int) SimpleIC {
+	done := make(chan bool)
+	ichan := make(chan int)
+	ochan := make(chan int)
+	return SimpleIC{
+		Intcode:     NewIC(program, ichan, ochan, done, 0),
+		staticInput: input,
 	}
-	return ic.prog[0]
 }
 
-func (ic *Intcode) getResult() int {
-	for _, op := range ic.output[1:] {
+func (sic *SimpleIC) getResult() int {
+	for _, op := range sic.staticOutput[1:] {
 		if op != 0 {
-			fmt.Println("Error in output", ic.output)
+			fmt.Println("Error in output", sic.staticOutput)
 		}
 	}
-
-	return ic.output[0]
+	return sic.staticOutput[0]
 }
 
-func (ic *Intcode) operate(pc int) int {
-	switch ic.prog[pc] % 100 {
-	case 1:
-		ic.prog[ic.prog[pc+3]] = ic.get(pc, 1) + ic.get(pc, 2)
-		return pc + 4
-	case 2:
-		ic.prog[ic.prog[pc+3]] = ic.get(pc, 1) * ic.get(pc, 2)
-		return pc + 4
-	case 3:
-		ic.prog[ic.prog[pc+1]] = ic.input[0]
-		ic.input = ic.input[1:]
-		return pc + 2
-	case 4:
-		ic.output = append([]int{ic.get(pc, 1)}, ic.output...)
-		return pc + 2
-	case 5:
-		if ic.get(pc, 1) != 0 {
-			return ic.get(pc, 2)
-		} else {
-			return pc + 3
-		}
-	case 6:
-		if ic.get(pc, 1) == 0 {
-			return ic.get(pc, 2)
-		} else {
-			return pc + 3
-		}
-	case 7:
-		if ic.get(pc, 1) < ic.get(pc, 2) {
-			ic.prog[ic.prog[pc+3]] = 1
-		} else {
-			ic.prog[ic.prog[pc+3]] = 0
-		}
-		return pc + 4
-	case 8:
-		if ic.get(pc, 1) == ic.get(pc, 2) {
-			ic.prog[ic.prog[pc+3]] = 1
-		} else {
-			ic.prog[ic.prog[pc+3]] = 0
-		}
-		return pc + 4
-	case 99:
-		return -1
-	default:
-		fmt.Println("ERROR", pc)
-		return -1
+func (sic *SimpleIC) calculate() int {
+	go func() {
+		sic.Intcode.calculate()
+	}()
+	for _, val := range sic.staticInput {
+		sic.input <- val
 	}
-}
 
-func (ic Intcode) get(pc, pos int) int {
-	code := ic.prog[pc]
-	pow := 100
-	for i := 1; i < pos; i++ {
-		pow *= 10
+	isDone := false
+
+	for !isDone {
+		select {
+		case isDone = <-sic.done:
+		case val := <-sic.output:
+			sic.staticOutput = append([]int{val}, sic.staticOutput...)
+		}
 	}
-	code /= pow
-	code = code % 10
-	if code == 0 {
-		return ic.prog[ic.prog[pc+pos]]
-	} else {
-		return ic.prog[pc+pos]
-	}
+	close(sic.done)
+
+	return sic.prog[0]
 }
