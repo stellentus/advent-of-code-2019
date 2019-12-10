@@ -49,6 +49,19 @@ func ExampleDay7() {
 	// D7-P2: 2299406
 }
 
+func ExampleDay8() {
+	day8()
+	// Output:
+	// D8-P1: 2904
+	// D8-P2:
+	// X  X  XX  XXX   XX  XXXX
+	// X  X X  X X  X X  X X
+	// XXXX X    XXX  X    XXX
+	// X  X X XX X  X X    X
+	// X  X X  X X  X X  X X
+	// X  X  XXX XXX   XX  X
+}
+
 func ExampleDay9() {
 	day9()
 	// Output:

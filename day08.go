@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 )
 
 func init() {
@@ -40,13 +41,14 @@ func day8() {
 
 	fmt.Println("D8-P2:")
 	for i := 0; i < 6; i++ {
+		str := ""
 		for j := 0; j < 25; j++ {
 			if output[i*25+j] == 1 {
-				fmt.Printf("X")
+				str += "X"
 			} else {
-				fmt.Printf(" ")
+				str += " "
 			}
 		}
-		fmt.Println("")
+		fmt.Println(strings.TrimRight(str, " "))
 	}
 }
