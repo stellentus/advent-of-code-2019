@@ -13,17 +13,19 @@ func day2(example int) {
 		program = []int64{1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50} // demo
 	}
 
-	ic := NewSimpleIC(program, []int{})
+	ic := NewIC(program)
 	ic.set(1, 12)
 	ic.set(2, 2)
-	fmt.Println("D2-P1:", ic.calculate())
+	ic.calculate()
+	fmt.Println("D2-P1:", ic.prog[0])
 
 	for i := 0; i < 99; i++ {
 		for j := 0; j < 99; j++ {
-			ic := NewSimpleIC(program, []int{})
+			ic := NewIC(program)
 			ic.set(1, i)
 			ic.set(2, j)
-			if ic.calculate() == 19690720 {
+			ic.calculate()
+			if ic.prog[0] == 19690720 {
 				fmt.Println("D2-P2:", 100*i+j)
 				break
 			}
