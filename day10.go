@@ -140,7 +140,6 @@ func numSeen(loc [][]bool, thisi, thisj int) int {
 			if !loc[i][j] || hidden[i][j] || (i == thisi && j == thisj) {
 				continue
 			}
-			// fmt.Println("\tHiding at", i, j, seen)
 			seen++
 			hide(hidden, thisi, thisj, i, j, maxi, maxj)
 		}
@@ -150,7 +149,6 @@ func numSeen(loc [][]bool, thisi, thisj int) int {
 			if !loc[i][j] || hidden[i][j] || (i == thisi && j == thisj) {
 				continue
 			}
-			// fmt.Println("\tHiding at", i, j, seen)
 			seen++
 			hide(hidden, thisi, thisj, i, j, maxi, maxj)
 		}
@@ -160,7 +158,6 @@ func numSeen(loc [][]bool, thisi, thisj int) int {
 			if !loc[i][j] || hidden[i][j] || (i == thisi && j == thisj) {
 				continue
 			}
-			// fmt.Println("\tHiding at", i, j, seen)
 			seen++
 			hide(hidden, thisi, thisj, i, j, maxi, maxj)
 		}
@@ -170,12 +167,10 @@ func numSeen(loc [][]bool, thisi, thisj int) int {
 			if !loc[i][j] || hidden[i][j] || (i == thisi && j == thisj) {
 				continue
 			}
-			// fmt.Println("\tHiding at", i, j)
 			seen++
 			hide(hidden, thisi, thisj, i, j, maxi, maxj)
 		}
 	}
-	// fmt.Printf("Visible at %d,%d (%d)\n\t", thisi, thisj, seen)
 	// seen = 0
 	for i, row := range loc {
 		for j, val := range row {
@@ -192,20 +187,16 @@ func numSeen(loc [][]bool, thisi, thisj int) int {
 		}
 		// fmt.Printf("\n\t")
 	}
-	// fmt.Println("or just ", seen)
 	return seen
 }
 
 func hide(hidden [][]bool, thisi, thisj, i, j, maxi, maxj int) {
 	diffi, diffj := minDiff(i-thisi, j-thisj)
-	// fmt.Printf("%d,%d to %d,%d scaled by %d,%d (diff %d,%d)\n", thisi, thisj, i, j, diffi, diffj, i-thisi, j-thisj)
 	i += diffi
 	j += diffj
 	for i >= 0 && i < maxi && j >= 0 && j < maxj {
-		// fmt.Println("\t\tHiding", i, j)
 		if thisi != i || thisj != j {
 			hidden[i][j] = true
-			// fmt.Printf("\thiding%d,%d\n", i, j)
 		}
 		i += diffi
 		j += diffj
@@ -238,9 +229,6 @@ func get200(locations [][]bool, tari, tarj int) point {
 			if !locations[thisi][thisj] || (thisi == tari && thisj == tarj) {
 				continue
 			}
-			if _, ok := trips[tan]; ok {
-				fmt.Println("OHDHNO", thisi, thisj, tan)
-			}
 			trips[tan] = point{thisi, thisj}
 			keys = append(keys, tan)
 		}
@@ -254,7 +242,6 @@ func calcTan(thisi, thisj, tari, tarj int) float64 {
 	if tan < 0 {
 		tan += 2 * math.Pi
 	}
-	// fmt.Printf("Pos %d,%d gets %f\n", thisi, thisj, tan)
 	return tan
 }
 

@@ -124,7 +124,7 @@ func (ic *Intcode) operate(pc int64) int64 {
 	case 99:
 		return -1
 	default:
-		fmt.Println("ERROR", pc)
+		fmt.Printf("Intcode operator %d is not implemented\n", pc)
 		return -1
 	}
 }
@@ -145,7 +145,7 @@ func (ic Intcode) posForMode(pc, pos int64) int64 {
 	case 2:
 		return ic.GetProg(pc+pos) + ic.base
 	default:
-		fmt.Println("param mode NOT IMPLEMENTED", code)
+		fmt.Printf("Intcode param mode %d is not implemented\n", code)
 		return 0
 	}
 }

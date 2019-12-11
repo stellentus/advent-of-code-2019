@@ -79,7 +79,6 @@ func Perm(ex int, a []int, f func(int, []int) int) (int, []int) {
 func perm(ex int, a []int, f func(int, []int) int, i, best int, bestA []int) (int, []int) {
 	if i > len(a) {
 		res := f(ex, a)
-		//fmt.Println(a, res, best, bestA)
 		if res > best {
 			return res, a
 		} else {
