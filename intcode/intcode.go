@@ -3,11 +3,9 @@ package intcode
 import "fmt"
 
 type Intcode struct {
-	prog         map[int64]int64
-	done         chan bool
-	label        int
-	base         int64
-	requestInput *chan bool
+	prog  map[int64]int64
+	label int
+	base  int64
 	InputProvider
 	OutputProvider
 }
@@ -89,9 +87,6 @@ func (ic *Intcode) operate(pc int64) int64 {
 		ic.setMode(pc, 3, ic.getMode(pc, 1)*ic.getMode(pc, 2))
 		return pc + 4
 	case 3:
-		if ic.requestInput != nil {
-			*ic.requestInput <- true
-		}
 		ic.setMode(pc, 1, ic.InputProvider())
 		return pc + 2
 	case 4:
@@ -127,8 +122,6 @@ func (ic *Intcode) operate(pc int64) int64 {
 		ic.base += ic.getMode(pc, 1)
 		return pc + 2
 	case 99:
-		// close(ic.input)
-		// ic.done <- true
 		return -1
 	default:
 		fmt.Println("ERROR", pc)
