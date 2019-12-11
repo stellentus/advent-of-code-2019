@@ -27,46 +27,42 @@ func getThrust(ex int, phase []int) int {
 		program = []int64{3, 23, 3, 24, 1002, 24, 10, 24, 1002, 23, -1, 23, 101, 5, 23, 23, 1, 24, 23, 23, 4, 23, 99, 0, 0}
 	}
 
-	done := make([]chan bool, 5)
-	io := make([]chan int64, 6)
-	io[0] = make(chan int64)
+	// Make all channels and load the initial phases
+	io := make([]chan int64, 5)
 	for i := 0; i < 5; i++ {
-		io[i+1] = make(chan int64)
-		done[i] = make(chan bool)
-		ic := NewIC(program, io[i], io[i+1], done[i], i)
-		go func() {
+		io[i] = make(chan int64, 1)
+		io[i] <- int64(phase[i]) // won't block because channel has buffer of 1
+	}
+
+	// Make the first 4 channels
+	for i := 0; i < 4; i++ {
+		ic := newChanIC(program, io[i], io[i+1], i)
+		go func(i int) {
+			// this go func will naturally end when this Intcode is done
 			ic.calculate()
-		}()
-		io[i] <- int64(phase[i])
-	}
-	io[0] <- 0 // initial input
-
-	var res int
-	isDone := false
-	for !isDone {
-		select {
-		case isDone = <-done[0]:
-			res = int(<-io[5])
-		case val := <-io[5]:
-			//fmt.Println("WAIT redir")
-			//fmt.Println("SEND redir")
-			io[0] <- val
-			//fmt.Println("DONE redir")
-		}
+		}(i)
 	}
 
-	for i := 1; i < 4; i++ {
-		<-done[i]
-		//fmt.Println("DONE", i)
-		close(done[i])
+	// Make the last channel and don't launch a thread
+	ic := newChanIC(program, io[4], io[0], 4)
+	io[0] <- 0     // initial input
+	ic.calculate() // Once this ends, the buffered output has one last read
+
+	res := int(<-io[0])
+
+	for i := 0; i < 5; i++ {
+		close(io[i])
 	}
-
-	close(io[5])
-
-	<-done[4]
-	close(done[4])
 
 	return res
+}
+
+func newChanIC(prog []int64, input, output chan int64, label int) Intcode {
+	ic := NewIC(prog)
+	ic.SetInputChan(input)
+	ic.SetOutputChan(output)
+	ic.SetLabel(label)
+	return ic
 }
 
 // Perm calls f with each permutation of a.

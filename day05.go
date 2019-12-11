@@ -21,47 +21,40 @@ func day5(example int) {
 
 type SimpleIC struct {
 	Intcode
-	staticInput  []int
-	staticOutput []int64
+	input        []int
+	idx          int
+	staticOutput *[]int64
+}
+
+func (si *SimpleIC) getNextInput() int64 {
+	val := si.input[si.idx]
+	si.idx++
+	return int64(val)
 }
 
 func NewSimpleIC(program []int64, input []int) SimpleIC {
-	done := make(chan bool)
-	ichan := make(chan int64)
-	ochan := make(chan int64)
-	return SimpleIC{
-		Intcode:     NewIC(program, ichan, ochan, done, 0),
-		staticInput: input,
+	si := SimpleIC{
+		Intcode: NewIC(program),
+		input:   input,
 	}
+	si.InputProvider = si.getNextInput
+	si.staticOutput = si.ExpectOutputArray()
+	return si
 }
 
 func (sic *SimpleIC) getResult() int64 {
-	for _, op := range sic.staticOutput[1:] {
-		if op != 0 {
-			fmt.Println("Error in output", sic.staticOutput)
+	l := len(*sic.staticOutput)
+	if l > 1 {
+		for _, op := range (*sic.staticOutput)[2 : l-1] {
+			if op != 0 {
+				fmt.Println("Error in output", sic.staticOutput)
+			}
 		}
 	}
-	return sic.staticOutput[0]
+	return (*sic.staticOutput)[l-1]
 }
 
 func (sic *SimpleIC) calculate() int64 {
-	go func() {
-		sic.Intcode.calculate()
-	}()
-	for _, val := range sic.staticInput {
-		sic.input <- int64(val)
-	}
-
-	isDone := false
-
-	for !isDone {
-		select {
-		case isDone = <-sic.done:
-		case val := <-sic.output:
-			sic.staticOutput = append([]int64{val}, sic.staticOutput...)
-		}
-	}
-	close(sic.done)
-
+	sic.Intcode.calculate()
 	return sic.prog[0]
 }

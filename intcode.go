@@ -4,26 +4,65 @@ import "fmt"
 
 type Intcode struct {
 	prog         map[int64]int64
-	input        chan int64
-	output       chan int64
 	done         chan bool
 	label        int
 	base         int64
 	requestInput *chan bool
+	InputProvider
+	OutputProvider
 }
 
-func NewIC(program []int64, input, output chan int64, done chan bool, label int) Intcode {
+type InputProvider func() int64
+type OutputProvider func(int64)
+
+type sliceInputter struct {
+	slice []int64
+	idx   int
+}
+
+func (si *sliceInputter) get() int64 {
+	val := si.slice[si.idx]
+	si.idx++
+	return val
+}
+
+func (ic *Intcode) SendInputSlice(in []int64) {
+	si := sliceInputter{slice: in}
+	ic.InputProvider = si.get
+}
+
+func (ic *Intcode) ExpectOutputArray() *[]int64 {
+	ss := &[]int64{}
+	ic.OutputProvider = func(i int64) {
+		*ss = append(*ss, i)
+	}
+	return ss
+}
+
+func (ic *Intcode) SetInputChan(input chan int64) {
+	ic.InputProvider = func() int64 {
+		return <-input
+	}
+}
+
+func (ic *Intcode) SetOutputChan(output chan int64) {
+	ic.OutputProvider = func(i int64) {
+		output <- i
+	}
+}
+
+func NewIC(program []int64) Intcode {
 	ic := Intcode{
-		prog:   make(map[int64]int64),
-		input:  input,
-		output: output,
-		done:   done,
-		label:  label,
+		prog: make(map[int64]int64),
 	}
 	for i, val := range program {
 		ic.prog[int64(i)] = val
 	}
 	return ic
+}
+
+func (ic *Intcode) SetLabel(label int) {
+	ic.label = label
 }
 
 func (ic *Intcode) calculate() {
@@ -45,10 +84,10 @@ func (ic *Intcode) operate(pc int64) int64 {
 		if ic.requestInput != nil {
 			*ic.requestInput <- true
 		}
-		ic.setMode(pc, 1, <-ic.input)
+		ic.setMode(pc, 1, ic.InputProvider())
 		return pc + 2
 	case 4:
-		ic.output <- ic.getMode(pc, 1)
+		ic.OutputProvider(ic.getMode(pc, 1))
 		return pc + 2
 	case 5:
 		if ic.getMode(pc, 1) != 0 {
@@ -80,8 +119,8 @@ func (ic *Intcode) operate(pc int64) int64 {
 		ic.base += ic.getMode(pc, 1)
 		return pc + 2
 	case 99:
-		close(ic.input)
-		ic.done <- true
+		// close(ic.input)
+		// ic.done <- true
 		return -1
 	default:
 		fmt.Println("ERROR", pc)

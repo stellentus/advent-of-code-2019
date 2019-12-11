@@ -35,25 +35,10 @@ func execute(ex int, code int64) []int64 {
 		program = []int64{1102, 34915192, 34915192, 7, 4, 7, 99, 0} // output 16-digit number
 	}
 
-	done := make(chan bool)
-	input := make(chan int64)
-	output := make(chan int64)
-	ic := NewIC(program, input, output, done, 0)
-	go func() {
-		ic.calculate()
-	}()
-	input <- code
+	ic := NewIC(program)
+	ic.SendInputSlice([]int64{code})
+	save := ic.ExpectOutputArray()
+	ic.calculate()
 
-	isDone := false
-
-	save := []int64{}
-	for !isDone {
-		select {
-		case isDone = <-done:
-		case val := <-output:
-			save = append(save, val)
-		}
-	}
-	close(done)
-	return save
+	return *save
 }
