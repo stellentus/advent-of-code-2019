@@ -35,10 +35,5 @@ func execute(ex int, code int64) []int64 {
 		program = []int64{1102, 34915192, 34915192, 7, 4, 7, 99, 0} // output 16-digit number
 	}
 
-	ic := NewIC(program)
-	ic.SendInputSlice([]int64{code})
-	save := ic.ExpectOutputArray()
-	ic.calculate()
-
-	return *save
+	return NewSimpleICResult(program, []int64{code})
 }

@@ -15,19 +15,15 @@ func day5(example int) {
 }
 
 func icResult(program []int64, input []int64) int64 {
-	ic := NewIC(program)
-	ic.SendInputSlice(input)
-	staticOutput := ic.ExpectOutputArray()
+	res := NewSimpleICResult(program, input)
 
-	ic.calculate()
-
-	l := len(*staticOutput)
+	l := len(res)
 	if l > 1 {
-		for _, op := range (*staticOutput)[2 : l-1] {
+		for _, op := range res[2 : l-1] {
 			if op != 0 {
-				fmt.Println("Error in output", *staticOutput)
+				fmt.Println("Error in output", res)
 			}
 		}
 	}
-	return (*staticOutput)[l-1]
+	return res[l-1]
 }

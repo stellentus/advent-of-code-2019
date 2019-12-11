@@ -61,6 +61,14 @@ func NewIC(program []int64) Intcode {
 	return ic
 }
 
+func NewSimpleICResult(program, input []int64) []int64 {
+	ic := NewIC(program)
+	ic.SendInputSlice(input)
+	staticOutput := ic.ExpectOutputArray()
+	ic.calculate()
+	return *staticOutput
+}
+
 func (ic *Intcode) SetLabel(label int) {
 	ic.label = label
 }
