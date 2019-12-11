@@ -7,6 +7,7 @@ import (
 
 var dayFlag = flag.Int("day", 1, "execute code for a given day")
 var exampleFlag = flag.Int("example", 0, "use a different example dataset")
+var debug = flag.Bool("debug", false, "print extra debug")
 
 type codeFunc func(example int)
 

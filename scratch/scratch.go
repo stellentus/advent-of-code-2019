@@ -8,6 +8,7 @@ import (
 )
 
 var exampleFlag = flag.Int("example", 0, "use a different example dataset")
+var debug = flag.Bool("debug", false, "print extra debug")
 
 func main() {
 	flag.Parse()

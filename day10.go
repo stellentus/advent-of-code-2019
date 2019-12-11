@@ -171,21 +171,24 @@ func numSeen(loc [][]bool, thisi, thisj int) int {
 			hide(hidden, thisi, thisj, i, j, maxi, maxj)
 		}
 	}
-	// seen = 0
-	for i, row := range loc {
-		for j, val := range row {
-			if i == thisi && j == thisj {
-				// fmt.Printf("%c", 'O')
-			} else if !val {
-				// fmt.Printf("%c", '.')
-			} else if hidden[i][j] {
-				// fmt.Printf("%c", '-')
-			} else {
-				// fmt.Printf("%c", '#')
-				// seen++
+	if *debug {
+		// Print the grid from the perspective of astroid O
+		// Print # if visible and - if hidden
+		for i, row := range loc {
+			for j, val := range row {
+				if i == thisi && j == thisj {
+					fmt.Printf("%c", 'O')
+				} else if !val {
+					fmt.Printf("%c", '.')
+				} else if hidden[i][j] {
+					fmt.Printf("%c", '-')
+				} else {
+					fmt.Printf("%c", '#')
+				}
 			}
+			fmt.Printf("\n")
 		}
-		// fmt.Printf("\n\t")
+		fmt.Printf("\n")
 	}
 	return seen
 }
