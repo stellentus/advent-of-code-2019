@@ -44,7 +44,7 @@ func day8(example int) {
 		str := ""
 		for j := 0; j < 25; j++ {
 			if output[i*25+j] == 1 {
-				str += "X"
+				str += "•"
 			} else {
 				str += " "
 			}
