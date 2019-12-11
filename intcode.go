@@ -3,12 +3,13 @@ package main
 import "fmt"
 
 type Intcode struct {
-	prog   map[int64]int64
-	input  chan int64
-	output chan int64
-	done   chan bool
-	label  int
-	base   int64
+	prog         map[int64]int64
+	input        chan int64
+	output       chan int64
+	done         chan bool
+	label        int
+	base         int64
+	requestInput *chan bool
 }
 
 func NewIC(program []int64, input, output chan int64, done chan bool, label int) Intcode {
@@ -41,6 +42,9 @@ func (ic *Intcode) operate(pc int64) int64 {
 		ic.setMode(pc, 3, ic.getMode(pc, 1)*ic.getMode(pc, 2))
 		return pc + 4
 	case 3:
+		if ic.requestInput != nil {
+			*ic.requestInput <- true
+		}
 		ic.setMode(pc, 1, <-ic.input)
 		return pc + 2
 	case 4:
