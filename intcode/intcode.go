@@ -1,4 +1,4 @@
-package main
+package intcode
 
 import "fmt"
 
@@ -51,7 +51,7 @@ func (ic *Intcode) SetOutputChan(output chan int64) {
 	}
 }
 
-func NewIC(program []int64) Intcode {
+func New(program []int64) Intcode {
 	ic := Intcode{
 		prog: make(map[int64]int64),
 	}
@@ -61,11 +61,11 @@ func NewIC(program []int64) Intcode {
 	return ic
 }
 
-func NewSimpleICResult(program, input []int64) []int64 {
-	ic := NewIC(program)
+func NewSimpleResult(program, input []int64) []int64 {
+	ic := New(program)
 	ic.SendInputSlice(input)
 	staticOutput := ic.ExpectOutputArray()
-	ic.calculate()
+	ic.Calculate()
 	return *staticOutput
 }
 
@@ -73,7 +73,7 @@ func (ic *Intcode) SetLabel(label int) {
 	ic.label = label
 }
 
-func (ic *Intcode) calculate() {
+func (ic *Intcode) Calculate() {
 	pc := int64(0)
 	for pc != -1 {
 		pc = ic.operate(pc)
@@ -81,7 +81,7 @@ func (ic *Intcode) calculate() {
 }
 
 func (ic *Intcode) operate(pc int64) int64 {
-	switch ic.getAt(pc) % 100 {
+	switch ic.GetProg(pc) % 100 {
 	case 1:
 		ic.setMode(pc, 3, ic.getMode(pc, 1)+ic.getMode(pc, 2))
 		return pc + 4
@@ -137,7 +137,7 @@ func (ic *Intcode) operate(pc int64) int64 {
 }
 
 func (ic Intcode) posForMode(pc, pos int64) int64 {
-	code := ic.getAt(pc)
+	code := ic.GetProg(pc)
 	pow := int64(100)
 	for i := int64(1); i < pos; i++ {
 		pow *= 10
@@ -146,11 +146,11 @@ func (ic Intcode) posForMode(pc, pos int64) int64 {
 	code = code % 10
 	switch code {
 	case 0:
-		return ic.getAt(pc + pos)
+		return ic.GetProg(pc + pos)
 	case 1:
 		return pc + pos
 	case 2:
-		return ic.getAt(pc+pos) + ic.base
+		return ic.GetProg(pc+pos) + ic.base
 	default:
 		fmt.Println("param mode NOT IMPLEMENTED", code)
 		return 0
@@ -158,14 +158,14 @@ func (ic Intcode) posForMode(pc, pos int64) int64 {
 }
 
 func (ic Intcode) getMode(pc, pos int64) int64 {
-	return ic.getAt(ic.posForMode(pc, pos))
+	return ic.GetProg(ic.posForMode(pc, pos))
 }
 
 func (ic Intcode) setMode(pc, pos, val int64) {
-	ic.setAt(ic.posForMode(pc, pos), val)
+	ic.SetProg(ic.posForMode(pc, pos), val)
 }
 
-func (ic Intcode) getAt(idx int64) int64 {
+func (ic Intcode) GetProg(idx int64) int64 {
 	val, ok := ic.prog[idx]
 	if !ok {
 		return 0
@@ -173,6 +173,6 @@ func (ic Intcode) getAt(idx int64) int64 {
 	return val
 }
 
-func (ic Intcode) setAt(idx, val int64) {
+func (ic Intcode) SetProg(idx, val int64) {
 	ic.prog[idx] = val
 }

@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"advent-of-code-2019/intcode"
+)
 
 func init() {
 	// Originally implemented at https://play.golang.org/p/colc0Eb5RWT
@@ -35,5 +39,5 @@ func execute(ex int, code int64) []int64 {
 		program = []int64{1102, 34915192, 34915192, 7, 4, 7, 99, 0} // output 16-digit number
 	}
 
-	return NewSimpleICResult(program, []int64{code})
+	return intcode.NewSimpleResult(program, []int64{code})
 }

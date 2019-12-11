@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"advent-of-code-2019/intcode"
+)
 
 func init() {
 	// Originally implemented at https://play.golang.org/p/CbNu8YDLBPs
@@ -15,7 +19,7 @@ func day5(example int) {
 }
 
 func icResult(program []int64, input []int64) int64 {
-	res := NewSimpleICResult(program, input)
+	res := intcode.NewSimpleResult(program, input)
 
 	l := len(res)
 	if l > 1 {

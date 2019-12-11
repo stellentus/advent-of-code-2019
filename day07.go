@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"advent-of-code-2019/intcode"
+)
 
 func init() {
 	// Originally implemented at https://play.golang.org/p/6p-1rDbUYAI
@@ -39,14 +43,14 @@ func getThrust(ex int, phase []int) int {
 		ic := newChanIC(program, io[i], io[i+1], i)
 		go func(i int) {
 			// this go func will naturally end when this Intcode is done
-			ic.calculate()
+			ic.Calculate()
 		}(i)
 	}
 
 	// Make the last channel and don't launch a thread
 	ic := newChanIC(program, io[4], io[0], 4)
 	io[0] <- 0     // initial input
-	ic.calculate() // Once this ends, the buffered output has one last read
+	ic.Calculate() // Once this ends, the buffered output has one last read
 
 	res := int(<-io[0])
 
@@ -57,8 +61,8 @@ func getThrust(ex int, phase []int) int {
 	return res
 }
 
-func newChanIC(prog []int64, input, output chan int64, label int) Intcode {
-	ic := NewIC(prog)
+func newChanIC(prog []int64, input, output chan int64, label int) intcode.Intcode {
+	ic := intcode.New(prog)
 	ic.SetInputChan(input)
 	ic.SetOutputChan(output)
 	ic.SetLabel(label)

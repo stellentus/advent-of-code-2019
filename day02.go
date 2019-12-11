@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"advent-of-code-2019/intcode"
+)
 
 func init() {
 	// Originally implemented at https://play.golang.org/p/dmZ-90Ojebw
@@ -13,26 +17,22 @@ func day2(example int) {
 		program = []int64{1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50} // demo
 	}
 
-	ic := NewIC(program)
-	ic.set(1, 12)
-	ic.set(2, 2)
-	ic.calculate()
-	fmt.Println("D2-P1:", ic.prog[0])
+	ic := intcode.New(program)
+	ic.SetProg(int64(1), int64(12))
+	ic.SetProg(int64(2), int64(2))
+	ic.Calculate()
+	fmt.Println("D2-P1:", ic.GetProg(0))
 
 	for i := 0; i < 99; i++ {
 		for j := 0; j < 99; j++ {
-			ic := NewIC(program)
-			ic.set(1, i)
-			ic.set(2, j)
-			ic.calculate()
-			if ic.prog[0] == 19690720 {
+			ic := intcode.New(program)
+			ic.SetProg(int64(1), int64(i))
+			ic.SetProg(int64(2), int64(j))
+			ic.Calculate()
+			if ic.GetProg(0) == 19690720 {
 				fmt.Println("D2-P2:", 100*i+j)
 				break
 			}
 		}
 	}
-}
-
-func (ic Intcode) set(pc, val int) {
-	ic.prog[int64(pc)] = int64(val)
 }
