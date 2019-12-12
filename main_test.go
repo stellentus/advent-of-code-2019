@@ -73,7 +73,7 @@ func ExampleDay10() {
 	day10(0)
 	// Output:
 	// D10-P1: 329
-	// D10-D2: 512
+	// D10-P2: 512
 }
 
 func ExampleDay11() {

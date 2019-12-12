@@ -102,7 +102,7 @@ func day10(example int) {
 	fmt.Println("D10-P1:", maxsighted)
 
 	pt200 := get200(locations, tari, tarj)
-	fmt.Println("D10-D2:", pt200.y*100+pt200.x)
+	fmt.Println("D10-P2:", pt200.y*100+pt200.x)
 }
 
 func getLocation(locations [][]bool) (int, int, int) {
